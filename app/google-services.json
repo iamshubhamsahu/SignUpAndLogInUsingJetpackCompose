@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "345624047824",
+    "project_id": "signupandloginusingjetpack",
+    "storage_bucket": "signupandloginusingjetpack.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345624047824:android:b3f0ebf9f8ad78730aeed5",
+        "android_client_info": {
+          "package_name": "com.example.signupandloginusingjetpackcompose"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "345624047824-h01psah0dpo5ekck9h1uqi5n0g899sr3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAH1rr1Svi1nIwqHbmTsWJuQptSKBPETM8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "345624047824-h01psah0dpo5ekck9h1uqi5n0g899sr3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
