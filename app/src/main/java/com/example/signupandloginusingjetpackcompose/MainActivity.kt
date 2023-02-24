@@ -13,16 +13,19 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 
 class MainActivity() : ComponentActivity() {
@@ -34,8 +37,6 @@ class MainActivity() : ComponentActivity() {
 
         }
     }
-
-
 }
 
 
@@ -44,7 +45,6 @@ fun EditText() {
 
     var email_signin by remember { mutableStateOf("") }
     var password_signin by remember { mutableStateOf("") }
-
     var name by remember { mutableStateOf("") }
     var mobile_no by remember { mutableStateOf("") }
     var email_signup by remember { mutableStateOf("") }
@@ -74,9 +74,13 @@ fun EditText() {
             label = { Text("Password") })
 
         Button(onClick = {
-
-
-        }) {
+            CoroutineScope(Dispatchers.IO).launch {
+                signInWithEmail_Password(
+                    FirebaseAuth.getInstance(),email_signin,password_signin
+                )
+            }
+        })
+        {
             Text(text = "Sign In")
         }
 
@@ -108,7 +112,9 @@ fun EditText() {
 
 
             CoroutineScope(Dispatchers.IO).launch {
-                signUpWithEmailAndPassword(FirebaseAuth.getInstance(), email_signup, password_signup)
+                signUpWithEmailAndPassword(
+                    FirebaseAuth.getInstance(), email_signup, password_signup
+                )
             }
 
         }) {
@@ -120,38 +126,69 @@ fun EditText() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp)
+                .padding(5.dp)
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.fb),
-                contentDescription = "Facebook",
-                modifier = Modifier
-                    .height(25.dp)
-                    .width(25.dp)
-            )
 
-            Spacer(modifier = Modifier.width(50.dp))
+            Button(onClick = { /*TODO*/ }) {
+                Image(
+                    painter = painterResource(id = R.drawable.fb),
+                    contentDescription = "Facebook",
+                    modifier = Modifier
+                        .height(25.dp)
+                        .width(25.dp)
+                )
+                
+                Text(text = "FB")
+            }
 
-            Image(
-                painter = painterResource(id = R.drawable.google),
-                contentDescription = "Google",
-                modifier = Modifier
-                    .height(25.dp)
-                    .width(25.dp)
-            )
+            Spacer(modifier = Modifier.width(5.dp))
 
-            Spacer(modifier = Modifier.width(50.dp))
+            Button(onClick = { /*TODO*/ }) {
+                Image(
+                    painter = painterResource(id = R.drawable.google),
+                    contentDescription = "Google",
+                    modifier = Modifier
+                        .height(25.dp)
+                        .width(25.dp)
+                )
+                Text(text = "Gmail")
 
-            Image(
-                painter = painterResource(id = R.drawable.github),
-                contentDescription = "Github",
-                modifier = Modifier
-                    .height(25.dp)
-                    .width(25.dp)
-            )
+            }
+
+            Spacer(modifier = Modifier.width(5.dp))
+
+           Button(onClick = { /*TODO*/ }) {
+
+               Image(
+                   painter = painterResource(id = R.drawable.github),
+                   contentDescription = "Github",
+                   modifier = Modifier
+                       .height(25.dp)
+                       .width(25.dp)
+               )
+               Text(text = "Git")
+
+           }
+            Spacer(modifier = Modifier.width(5.dp))
+
+            Button(onClick = { /*TODO*/ }) {
+
+                Image(
+                    painter = painterResource(id = R.drawable.phone),
+                    contentDescription = "Phone",
+                    modifier = Modifier
+                        .height(25.dp)
+                        .width(25.dp)
+                )
+                Text(text = "Msg")
+
+
+            }
         }
     }
 }
+
+
 
 
 @Composable
@@ -167,14 +204,26 @@ suspend fun signUpWithEmailAndPassword(
 ): AuthResult? {
     return try {
         val result = firebaseAuth.createUserWithEmailAndPassword(emailId, password).await()
-       // Toast.makeText(this,"Success",Toast.LENGTH_SHORT).show()
-        Log.e("AuthResult", "${result.user?.email}")
+        Log.e("AuthResult", "SignUp ${result.user?.email}")
         result
 
     } catch (e: Exception) {
         Log.e("AuthResult", "${e.message}")
         null
     }
+}
 
 
+
+suspend fun signInWithEmail_Password(
+    firebaseAuth: FirebaseAuth,emailId: String,password: String
+):AuthResult?{
+    return try{
+        val result = firebaseAuth.signInWithEmailAndPassword(emailId,password).await()
+        Log.e("AuthResult", "login ${result.user?.email}")
+        result
+    } catch (e: Exception){
+        Log.e("AuthResult", "${e.message}")
+        null
+    }
 }
